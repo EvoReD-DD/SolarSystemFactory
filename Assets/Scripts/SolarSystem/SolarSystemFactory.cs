@@ -1,18 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class SolarSystemFactory : MonoBehaviour, IPlaneterySystemFactory
 {
-    [SerializeField] private double _massInput;
+    [SerializeField] private TMP_InputField _massInput;
+    [SerializeField] private Button _clear;
     private PlaneterySystem planeterySystem;
+
+    private void Start()
+    {
+        _clear.interactable = false;
+    }
 
     public void Create(double totalMass)
     {
         planeterySystem = this.GetComponent<PlaneterySystem>();
         planeterySystem.GeneratePlanetSystem(totalMass);
+        _clear.interactable = true;
     }
 
-    private void Start()
+    public void ClearCall()
     {
-        Create(_massInput);
+        planeterySystem.Clear();
+        _clear.interactable = false;
+    }
+
+    public void CreateCall()
+    {
+        double value = double.Parse(_massInput.text, System.Globalization.CultureInfo.InvariantCulture);
+        Create(value);
     }
 }

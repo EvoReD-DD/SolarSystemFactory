@@ -7,6 +7,9 @@ public class PlaneterySystem : MonoBehaviour, IPlaneterySystem
     public List<IPlaneteryObject> PlaneteryObjects { get; set; }
     public List<PlaneteryObject> PlaneteryObjectsSystem { get; set; }
 
+    double currentMassSystem = 0;
+    int minPlanetCount = 6;
+
     private Vector3 centerPoint = new Vector3(0, 0, 0);
 
     private bool IsCreated = false;
@@ -25,17 +28,34 @@ public class PlaneterySystem : MonoBehaviour, IPlaneterySystem
         }
     }
 
+    public void Clear()
+    {
+        foreach (var planetery in PlaneteryObjectsSystem)
+        {
+            Destroy(planetery.gameObject);
+        }
+
+        PlaneteryObjectsSystem.Clear();
+        PlaneteryObjects.Clear();
+    }
+
     private void Initial()
     {
-        PlaneteryObjects = new List<IPlaneteryObject>();
-        PlaneteryObjectsSystem = new List<PlaneteryObject>();
+        if (PlaneteryObjects != null)
+        {
+            currentMassSystem = 0;
+            minPlanetCount = 6;
+        }
+        else
+        {
+            PlaneteryObjects = new List<IPlaneteryObject>();
+            PlaneteryObjectsSystem = new List<PlaneteryObject>();
+        }
     }
 
     public void GeneratePlanetSystem(double totalMass)
     {
         Initial();
-        double currentMassSystem = 0;
-        int minPlanetCount = 6;
         for (int i = 0; i < minPlanetCount; i++)
         {
             if (currentMassSystem < totalMass)
@@ -53,6 +73,10 @@ public class PlaneterySystem : MonoBehaviour, IPlaneterySystem
         }
 
         IsCreated = true;
+        if (PlaneteryObjectsSystem != null)
+        {
+            Once = false;
+        }
     }
 
     private double CreateRandomPlanets()
